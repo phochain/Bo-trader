@@ -1,0 +1,380 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.notification-item-title {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.notification-item-text {
+    font-size: 12px;
+    color: #8b8d96;
+    line-height: 16px;
+    margin-bottom: 8px;
+}
+
+.notification-item-status {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    background: #e8ab10;
+    position: absolute;
+    top: 7px;
+    right: -1px;
+}
+
+.notification-item-time {
+    border-radius: 3px;
+    display: inline-block;
+    background: #02142b;
+    height: 24px;
+    padding: 0 8px;
+    font-size: 12px;
+    line-height: 24px;
+    color: hsla(0, 0%, 100%, .44);
+    margin-left: 40px;
+}
+
+.lastResults {
+    position: relative;
+    color: #fff;
+    background: transparent;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 25px;
+    line-height: 28px;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Space between rows */
+}
+
+.row {
+    display: flex;
+    gap: 5px; /* Space between circles */
+    justify-content: center;
+}
+
+.circle {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.green {
+    background-color: #4caf50; /* Green color */
+}
+
+.red {
+    background-color: #f44336; /* Red color */
+}
+
+.banner {
+    background-image: url("/public/assets/img/background/affiliate_bg.png");
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 185px);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.affiliateInfo {
+    padding: 1.25rem;
+    border-radius: 18px;
+    height: 100%;
+    border: 1px solid;
+    border-color: #e8ab10;
+}
+
+.subBanner {
+    background: linear-gradient(180deg, #fef78a, #dbb311 50%, #f3b50e) !important;
+    padding: 48px 0;
+}
+
+.chakra-tabs__tablist {
+    border-bottom: none !important;
+}
+
+.live-banner-2 {
+    background-image: url("/public/assets/img/background/winbanner.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 48px;
+}
+
+.live-banner {
+    background-image: url("/public/assets/img/background/livebanner.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 48px;
+}
+
+
+.round {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    position: relative;
+    margin-right: 5px;
+    background: rgb(45, 85, 253);
+}
+
+.round:after {
+    position: absolute;
+    content: "";
+    display: block;
+    overflow: hidden;
+    width: 16px;
+    height: 16px;
+    top: 2px;
+    left: 2px;
+    border-radius: 50%;
+    background-color: #02142b;
+}
+
+.round--draw {
+    background: rgb(123, 115, 142);
+}
+
+.round--lose {
+    background: rgb(255, 42, 85);
+}
+
+.avt {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    font-weight: 700;
+}
+
+.winput {
+    color: #8b8d96;
+    height: 45px;
+    line-height: 45px;
+    font-size: .875rem;
+    border-radius: 8px;
+    border: 1px solid hsla(0, 0%, 100%, .23) !important;
+    background: hsla(0, 0%, 43.9%, .23) !important;
+}
+
+
+.container-- {
+    width: 90%;
+    margin: auto;
+    max-width: 640px;
+}
+
+.bsod {
+    padding-top: 10%;
+}
+
+.bsod .neg {
+    text-align: center;
+    color: #0414a7;
+}
+
+.bsod .neg .bg {
+    background: #aaa;
+    padding: 0 15px 2px 13px;
+}
+
+.bsod .title {
+    margin-bottom: 50px;
+}
+
+.accType {
+    color: #fff;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #fef78a, #dbb311 50%, #f3b50e);
+    margin-left: 4px;
+    line-height: 20px;
+    font-size: .6rem;
+    text-align: center;
+    padding: 1px 5px;
+    font-weight: bold;
+}
+
+.motion {
+    border: 2px solid #000;
+    border-bottom: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 252px;
+    background: #011022;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.motion-btn {
+    padding: 0;
+    position: absolute;
+    left: -40px;
+    top: 80%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 40px;
+}
+
+.borderSubBanner {
+    margin: auto;
+    width: 90px;
+    border-bottom: 1px solid hsla(0, 0%, 100%, .19);
+}
+
+.main-banner {
+    position: relative;
+}
+
+.main-banner:before {
+    content: "";
+    display: block;
+    width: 1060px;
+    height: 925px;
+    background: url(/public/assets/img/main_banner_right.png) 0 0 no-repeat;
+    background-size: cover;
+    position: absolute;
+    right: -25%;
+    top: -48%;
+    z-index: 1;
+}
+
+.main-banner-title {
+    line-height: 32px;
+    margin-bottom: 15px;
+    color: #f4f7f9;
+    font-weight: 800;
+}
+
+.main-banner-text {
+    line-height: 22px;
+    color: #8d9eb9;
+}
+
+.introduce {
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    position: relative;
+    z-index: 3;
+    padding: 285px 0 45px;
+    background-image: url(public/assets/img/introduce.png);
+}
+
+.trade-faster {
+    padding-top: 100px;
+}
+
+.security-item-inner {
+    height: 100%;
+    position: relative;
+    background: #1b2939;
+    border-radius: 30px;
+    padding: 130px 15px 30px;
+}
+
+.security-item-img {
+    width: 132px;
+    height: 219px;
+    left: 50%;
+    margin-left: -65px;
+    top: -100px;
+    bottom: auto;
+    position: absolute;
+}
+
+.tradeNow {
+    background-position: center 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(public/assets/img/trade-now-bg.png);
+}
+
+.trade-now-img {
+    position: relative;
+    top: -80px;
+    margin-top: -80px;
+    padding: 0 20px;
+    margin-bottom: 70px;
+}
+
+.bg-chart {
+    background-image: url("/assets/img/background/metatrading_bg_chart.svg");
+    width: 100%;
+    height: 100%;
+}
+
+
+
+@media screen and (min-width: 1440px) {
+    .security-item-img {
+        position: absolute;
+        left: 90px;
+        top: -16%;
+        bottom: 0;
+        width: 132px;
+        height: 219px;
+    }
+
+    .security-item-inner {
+        padding: 30px 35px 30px 190px;
+        min-height: 190px;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .main-banner:before {
+        width: 337px;
+        height: 404px;
+        top: -18%;
+        right: -27%;
+        transform: scale(1.5);
+    }
+
+    .introduce {
+        margin-top: -100px;
+        background-size: auto 100%;
+        background-position: top;
+        padding: 150px 0;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .introduce {
+        margin-top: -60px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .circle {
+        max-width: 20px;
+        max-height: 20px;
+    }
+}
