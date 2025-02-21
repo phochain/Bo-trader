@@ -26,7 +26,7 @@ const TokenTransactionForm: React.FC<TokenTransactionFormProps> = ({
                                                                      tokenWalletBalance,
                                                                      isLoading,
                                                                    }) => {
-  const {balance} = useGlobalApi() as { balance: number }; // Typecasting if needed
+  const {balance} = useGlobalApi(); // Typecasting if needed
   const {t} = useTranslation();
 
   const options = LIST_TOKEN_CONTRACT_DATA.map(token => ({
@@ -40,14 +40,15 @@ const TokenTransactionForm: React.FC<TokenTransactionFormProps> = ({
     token: token
   }));
 
-  const defaultUSDOption = options.find(option => option.value === "USDT");
+  const defaultUSDOption = options.find(option => option.value === "MSG");
   const [selectedOption, setSelectedOption] = useState(options[0]);
 
   useEffect(() => {
-    if (defaultUSDOption) {
+    if (defaultUSDOption && defaultUSDOption.value !== selectedOption.value) {
       setSelectedOption(defaultUSDOption);
     }
-  }, [defaultUSDOption]);
+  }, [defaultUSDOption, selectedOption]);
+  
 
   const handleChange = (option: any) => {
     setSelectedOption(option);
@@ -55,7 +56,7 @@ const TokenTransactionForm: React.FC<TokenTransactionFormProps> = ({
 
   const items = [
     {
-      label: t('Tài sản'),
+      label: t('Assets'),
       type: "select",
       content: (
         <Select
@@ -92,37 +93,37 @@ const TokenTransactionForm: React.FC<TokenTransactionFormProps> = ({
       ),
     },
     {
-      label: t('Số lượng'),
+      label: t('Quantity'),
       type: "input",
       content: (
         <InputGroup size='md'>
           <Input
             type={"number"}
             pr='4.5rem'
-            placeholder={`Giá trị ${selectedOption?.value || 'token'}`}
+            placeholder={`Value ${selectedOption?.value || 'token'}`}
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
           <InputRightElement width='4.5rem'>
-            <Button h='1.75rem' size='sm' onClick={handleSetMax} _hover='transparent'>{t('Tất cả')}</Button>
+            <Button h='1.75rem' size='sm' onClick={handleSetMax} _hover='transparent'>{t('All')}</Button>
           </InputRightElement>
         </InputGroup>
       ),
     },
     {
-      label: t('Tổng số dư'),
+      label: t('Total balance'),
       type: "text",
-      value: `${balance.toLocaleString()} USDT`,
+      value: `${balance} MSG`,
     },
   ];
 
   if (type === 'deposit') {
     items.splice(2, 0, {
-      label: t('Có sẵn'),
+      label: t('Available'),
       type: "text",
       value: `${tokenWalletBalance} ${selectedOption?.value || 'token'}`,
     });
-  }
+  } 
 
   const renderItem = (item: { type: string; label: string; content?: JSX.Element; value?: string }, index: number) => {
     switch (item.type) {
@@ -151,7 +152,7 @@ const TokenTransactionForm: React.FC<TokenTransactionFormProps> = ({
       {items.map(renderItem)}
       <Flex gap={4} justifyContent="end">
         <Button colorScheme='green' onClick={onSubmit} isLoading={isLoading} _hover='transparent'>
-          {type === 'deposit' ? t('Xác nhận tiền gửi') : t('Xác nhận rút tiền')}
+          {type === 'deposit' ? t('Confirm deposit') : t('Confirm withdraw')}
         </Button>
       </Flex>
     </>

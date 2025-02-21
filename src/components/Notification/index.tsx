@@ -104,7 +104,7 @@ const NotificationPage: React.FC = () => {
   useEffect(() => {
     const fetchNotificationHistory = async () => {
       try {
-        const res = await BoTraderApi.historyTrade('0', '100000', false);
+        const res = await BoTraderApi.historyTrade('0', '100000');
         const latestNotifications = res.data.contents as Notification[];
         console.log(latestNotifications, 'latestNotifications');
         latestNotifications.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -131,7 +131,7 @@ const NotificationPage: React.FC = () => {
         </Box>
         <Box ms={2} pe={2}>
           <Text fontWeight="bold" color="#8b8d96cc">
-            {t('Thông báo kết quả đặt lệnh')}
+            {t('Order result notification')}
           </Text>
         </Box>
         <Box className="notification-item-status"/>
@@ -141,7 +141,7 @@ const NotificationPage: React.FC = () => {
           <NotificationItem key={index} notification={notification} />
         ))
       ) : (
-        <Text textAlign="center">{t('Không có thông báo nào')} !!!</Text>
+        <Text textAlign="center">{t('No notifications')} !!!</Text>
       )}
     </Box>
   );

@@ -25,13 +25,13 @@ const ActionButtons = () => {
   const {t} = useTranslation();
 
   const actions = [
-    {label: t('Nạp tiền'), icon: '/assets/img/icon-deposit.svg', index: 0},
-    {label: t('Rút tiền'), icon: '/assets/img/icon-withdraw.svg', index: 1}
+    {label: t('Deposit'), icon: '/assets/img/icon-deposit.svg', index: 0},
+    {label: t('Withdraw'), icon: '/assets/img/icon-withdraw.svg', index: 1}
   ];
 
   const tabs: any = [
-    <Text fontSize='sm' className='lastResults'>{t('Nạp tiền')}</Text>,
-    <Text fontSize='sm' className='lastResults'>{t('Rút tiền')}</Text>
+    <Text fontSize='sm' className='lastResults'>{t('Deposit')}</Text>,
+    <Text fontSize='sm' className='lastResults'>{t('Withdraw')}</Text>
   ];
 
   const contents = [

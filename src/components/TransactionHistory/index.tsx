@@ -27,7 +27,7 @@ const TransactionHistory = () => {
   return (
     <>
       <Text fontSize='3xl' fontWeight={'bold'} my={'24px'}>
-        {t('Lịch sử Giao dịch')}
+        {t('Transaction history')}
       </Text>
       <ConversionTable headers={conversionHeaders} data={conversionDataTable}/>
       <Flex justifyContent={"end"} p={'25px 0'}>

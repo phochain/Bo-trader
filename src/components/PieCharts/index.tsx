@@ -73,7 +73,7 @@ const ChartComponent = () => {
     <Box className='flex-box-center' maxW={'250px'}>
       <canvas ref={doughnutRef} width="250" height="250" ></canvas>
       <Box textAlign={"center"} position={"absolute"}>
-        {t('Lượt giao dịch')} <br/>
+        {t('Number of transactions')} <br/>
         {address ? tradeStats.totalTrades.toString() : '0'}
       </Box>
     </Box>

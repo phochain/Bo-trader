@@ -1,74 +1,46 @@
 import axiosClient from "../config/axiosClient.ts";
 
 export const BoTraderApi = {
-  login: async (message: string, signature: string, referrer_id: number): Promise<any> => {
-    return await axiosClient.post('auth/sign', {
+  login: async (message: string, signature: string): Promise<any> => {
+    return await axiosClient.post('users/login', {
       message,
-      signature,
-      referrer_id
+      signature
     });
   },
 
   getMe: async (): Promise<any> => {
-    return await axiosClient.get('/auth/me');
-  },
-
-  getListToken: async (): Promise<any> => {
-    return await axiosClient.get('/tokens');
-  },
-
-  getBalance: async (): Promise<any> => {
-    return await axiosClient.get('/wallet/balance');
-  },
-
-  getHistory: async (): Promise<any> => {
-    return await axiosClient.get('wallet/history')
-  },
-
-  getCommission: async (page: string, limit: string,): Promise<any> => {
-    return await axiosClient.get(`/wallet/get-commission?page=${page}&limit=${limit}`)
+    return await axiosClient.get('users/me');
   },
 
   deposit: async (txHash: string): Promise<any> => {
-    const res = await axiosClient.post('/wallet/deposit', {
+    const res = await axiosClient.post('wallet/deposit', {
       txHash
     });
     return res.data;
   },
 
-  withdraw: async (data: any): Promise<any> => {
+  withdraw: async (amount: number): Promise<any> => {
     return await axiosClient.post('wallet/withdraw', {
-      ...data
+      amount
     });
   },
 
-  historyTrade: async (page: string, limit: string, is_demo: boolean): Promise<any> => {
-    return await axiosClient.get(`/trade/get-trade-by-user-2?page=${page}&limit=${limit}&is_demo=${is_demo}`);
+  getHistory: async (page: string, limit: string): Promise<any> => {
+    return await axiosClient.get(`wallet/transactions?page=${page}&limit=${limit}`)
   },
+
+  historyTrade: async (page: string, limit: string): Promise<any> => {
+    return await axiosClient.get(`orders/?page=${page}&limit=${limit}`)
+  },
+
 
   userPlaceTrade: async (
-    tokenId: number,
-    quoteTokenId: number,
-    baseTokenId: number,
-    amount: number,
-    direction: string,
-    expiryTime: number,
-    is_demo: boolean
+    betAmount: number,
+    betDirection: string
   ): Promise<any> => {
-    return await axiosClient.post('trade/place-trade', {
-      tokenId,
-      quoteTokenId,
-      baseTokenId,
-      amount,
-      direction,
-      expiryTime,
-      is_demo
-    });
-  },
-
-  resetBalanceTest: async (tokenId: number): Promise<any> => {
-    return await axiosClient.post('trade/reset-balance-test', {
-      tokenId
+    return await axiosClient.post('orders/place', {
+      betAmount,
+      betDirection,
     });
   },
 

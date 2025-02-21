@@ -70,7 +70,7 @@ const ValueInput: React.FC<ValueInputProps> = ({
 
   return (
     <Box>
-      <Text fontSize="sm">{t("Giá trị")}</Text>
+      <Text fontSize="sm">{t("Value")}</Text>
       <Flex>
         <BtnPrice onClick={handleDecrease} aria-label="Decrease value">-</BtnPrice>
         <InputGroup>

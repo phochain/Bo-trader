@@ -6,7 +6,7 @@ const NoOrder = () => {
     <>
       <Box flexDirection={"column"} className='flex-box-center'>
         <PiSwapThin size={82}/>
-        <Text textAlign={"center"} fontSize='sm'>Bạn chưa có lệnh nào</Text>
+        <Text textAlign={"center"} fontSize='sm'>You haven't issued any commands yet</Text>
       </Box>
     </>
   )

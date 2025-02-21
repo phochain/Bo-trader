@@ -12,7 +12,7 @@ const TradeHistory = () => {
   const { isBalanceVisible, toggleBalanceVisibility } = useGlobalApi();
 
   // Sử dụng useMemo để tránh tính toán lại chuỗi tĩnh
-  const title = useMemo(() => t('Số liệu') + " B.O", [t]);
+  const title = useMemo(() => t('Statistics') + " B.O", [t]);
 
   return (
     <Box borderTop={'2px solid #000'} p={'16px'}>

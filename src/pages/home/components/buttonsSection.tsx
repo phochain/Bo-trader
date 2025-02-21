@@ -8,11 +8,11 @@ type ButtonContent = {
   text: string;
   bg: string;
   icon: JSX.Element | null;
-  action: 'BUY' | 'SELL' | null;
+  action: 'UP' | 'DOWN' | null;
 };
 
 interface ButtonsSectionProps {
-  onPlaceTrade: (action: 'BUY' | 'SELL') => void;
+  onPlaceTrade: (action: 'UP' | 'DOWN') => void;
   loadingState: { [key: string]: boolean };
   playSound: (soundPath: string) => void;
   inputValue: number;
@@ -25,15 +25,15 @@ const ButtonsSection: React.FC<ButtonsSectionProps> = ({onPlaceTrade, loadingSta
 
   // Thay đổi nội dung dựa trên trạng thái isActive
   const buttonsRightContent: ButtonContent[] = [
-    {text: t('MUA'), bg: 'rgb(3, 167, 129)', icon: <FaArrowTrendUp/>, action: 'BUY'},
-    {text: isActive ? t('Chờ kết quả') : t('Hãy đặt lệnh'), bg: 'rgb(29, 35, 59)', icon: null, action: null},
-    {text: t('BÁN'), bg: 'rgb(240, 83, 89)', icon: <FaArrowTrendDown/>, action: 'SELL'},
+    {text: t('BUY'), bg: 'rgb(3, 167, 129)', icon: <FaArrowTrendUp/>, action: 'UP'},
+    {text: isActive ? t('Wait for the result') : t('Place an order'), bg: 'rgb(29, 35, 59)', icon: null, action: null},
+    {text: t('SELL'), bg: 'rgb(240, 83, 89)', icon: <FaArrowTrendDown/>, action: 'DOWN'},
   ];
 
-  const handleButtonClick = (action: 'BUY' | 'SELL' | null) => {
-    if (action === 'BUY' || action === 'SELL') {
+  const handleButtonClick = (action: 'UP' | 'DOWN' | null) => {
+    if (action === 'UP' || action === 'DOWN') {
       if (inputValue <= 0) {
-        toast.error('Số lượng giao dịch phải lớn hơn 0.');
+        toast.error('The number of transactions must be greater than 0.');
         return;
       }
       startCountdown();

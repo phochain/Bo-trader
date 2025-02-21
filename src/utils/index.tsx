@@ -1,75 +1,9 @@
 import {useCallback, useEffect, useState} from 'react';
 
-interface Token {
-  id: string;
-  name: string;
-}
-
-interface TradeItem {
-  tokenId: string;
-  amount: string; // Assuming amount is a string from the API
-  direction: string; // 'SELL' or 'BUY'
-  baseTokenId: string;
-  quoteTokenId: string;
-  entryPrice: string; // Assuming entryPrice is a string from the API
-  expiryTime: string; // Assuming expiryTime is a string or number
-  exitPrice: string; // Assuming exitPrice is a string from the API
-  result: string; // 'WIN' or 'LOSS'
-  status: string; // Status of the trade
-  createdAt: string; // Date string from API
-}
-
-export const formatTradeData = (
-  data: TradeItem[],
-  listToken: Token[]
-): Array<{
-  tokenId: string;
-  amount: string;
-  direction: {
-    text: string;
-    color: string;
-  };
-  tradingPair: string;
-  entryPrice: string;
-  expiryTime: string;
-  exitPrice: string;
-  result: {
-    text: string;
-    color: string;
-  };
-  status: string;
-  createdAt: string;
-}> => {
-  const tokenMap = listToken.reduce((acc, token) => {
-    acc[token.id] = token.name;
-    return acc;
-  }, {} as Record<string, string>);
-
-  return data.map(item => ({
-    tokenId: tokenMap[item.tokenId] || item.tokenId,
-    amount: parseFloat(item.amount).toFixed(2),
-    direction: {
-      text: item.direction,
-      color: item.direction === 'SELL' ? '#f05359' : '#03a781',
-    },
-    tradingPair: `${tokenMap[item.baseTokenId] || item.baseTokenId}/${tokenMap[item.quoteTokenId] || item.quoteTokenId}`,
-    entryPrice: `${parseFloat(item.entryPrice).toFixed(2)} USDT`,
-    expiryTime: new Date(parseInt(item.expiryTime)).toLocaleString(),
-    exitPrice: `${parseFloat(item.exitPrice).toFixed(2)} USDT`,
-    result: {
-      text: item.result,
-      color: item.result === 'WIN' ? '#03a781' : '#f05359',
-    },
-    status: item.status,
-    createdAt: new Date(item.createdAt).toLocaleString(),
-  }));
-};
-
 export const playSound = (soundFilePath: string) => {
   const audio = new Audio(soundFilePath);
   audio.play();
 };
-
 
 export const useCountdown = (initialDuration: number) => {
   const [timeLeft, setTimeLeft] = useState(0);

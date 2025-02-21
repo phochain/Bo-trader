@@ -32,7 +32,7 @@ const PsychologicalIndicator = () => {
   return (
     <Box m={"28px 0 24px 0"} display={{ base: 'none', lg: 'block' }}>
       <Center fontSize='lg' my={4} pb={1}>
-        {t('Chỉ báo tâm lý')}
+        {t('Psychological Indicators')}
       </Center>
       <Progress value={progressValue} size='sm' borderRadius={'4px'} colorScheme='pink' background={'#03a781'}/>
       <Flex justifyContent={"space-between"} mt={2}>

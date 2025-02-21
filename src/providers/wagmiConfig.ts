@@ -1,17 +1,37 @@
-import {getDefaultConfig} from "@rainbow-me/rainbowkit";
-import {sepolia} from "wagmi/chains";
-import {http} from 'wagmi';
+import { getDefaultConfig } from "@rainbow-me/rainbowkit";
+import { http } from 'wagmi';
+
+const phoTestnet = {
+  id: 3106,
+  name: "PHO TESTNET",
+  network: "pho-testnet",
+  nativeCurrency: {
+    decimals: 18,
+    name: "PHO",
+    symbol: "PHO",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://testnet.phochain.org"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "PHO Explorer",
+      url: "",
+    },
+  },
+};
 
 const projectId = '1fed74cecc1c7544f6ea1d985f77ca8e';
 const config = getDefaultConfig({
   appName: 'BO Trader',
   projectId: projectId,
-  chains: [sepolia],
+  chains: [phoTestnet],
   transports: {
-    [sepolia.id]: http('https://eth-sepolia.g.alchemy.com/v2/jG2KYCWqUGgnFEGuKAvsCKSEIn13mKPh'),
+    [phoTestnet.id]: http('https://testnet.phochain.org'),
   },
   ssr: true
-} as any)
+} as any);
 
-
-export default config
+export default config;

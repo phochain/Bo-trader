@@ -1,4 +1,4 @@
-export const JWT_LOCAL_STORAGE_KEY = 'bo-trader-jwt-token'
+export const JWT_LOCAL_STORAGE_KEY = 'accessToken'
 export const LIST_TOKEN_CONTRACT_DATA = [
   {
     productId: 0,
@@ -209,7 +209,14 @@ export const LIST_TOKEN_CONTRACT_DATA = [
     address: "0x3706080175f4B9ED327c4Cbf045Def0A28Fce8eb",
     icon: 'assets/img/coins/svg/op.png',
     name: "Optimism"
-  }
+  },
+  {
+    productId: 32,
+    symbol: "MSG",
+    address: "0x2C41E0fcc0fB8275Af7277DdedD7F3c3408f90E0",
+    icon: '',
+    name: "MSG"
+  },
 ]
 export const TOKEN_CONTRACT_ABI = [
   {
@@ -736,6 +743,19 @@ export const TOKEN_CONTRACT_ABI = [
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -1231,16 +1251,14 @@ export const ENDPOINT_CONTRACT_ABI = [
     "type": "function"
   }
 ]
-export const ENDPOINT_CONTRACT_ADDRESS = '0xD5E1e1C268153BCB0456081DB2D7bA70a424Ef50'
+export const ENDPOINT_CONTRACT_ADDRESS = '0x2C41E0fcc0fB8275Af7277DdedD7F3c3408f90E0'
 export const conversionHeaders = [
-  {label: 'Token', key: 'tokenId'},
-  {label: 'Amount', key: 'amount'},
-  {label: 'Direction', key: 'direction'},
-  {label: 'Trading Pair', key: 'tradingPair'},
-  {label: 'Entry Price', key: 'entryPrice'},
-  {label: 'Expiry Time', key: 'expiryTime'},
-  {label: 'Exit Price', key: 'exitPrice'},
-  {label: 'Result', key: 'result'},
-  {label: 'Status', key: 'status'},
+  {label: 'UserId', key: 'userId'},
+  {label: 'Amount', key: 'betAmount'},
+  {label: 'Direction', key: 'betDirection'},
+  {label: 'Entry Price', key: 'openPrice'},
+  {label: 'Exit Price', key: 'closePrice'},
+  {label: 'Expiry Time', key: 'closeTime'},
+  {label: 'Result', key: 'results'},
   {label: 'Created At', key: 'createdAt'},
 ];

@@ -9,8 +9,8 @@ interface Header {
 
 interface DataItem {
   [key: string]: any; // Adjust this type based on your actual data structure
-  direction?: { text: string; color: string };
-  result?: { text: string; color: string };
+  direction?: { text: string | number; color: string };
+  result?: { text: string | number; color: string };
 }
 
 interface ConversionTableProps {
@@ -48,13 +48,13 @@ const ConversionTable: React.FC<ConversionTableProps> = ({ headers, data }) => {
             {!address ? ( // Check if the wallet is not connected
               <Tr>
                 <Td colSpan={headers.length} textAlign="center" p={'12px'}>
-                  <Text>Vui lòng kết nối ví để xem nội dung</Text>
+                  <Text>Please connect your wallet to view the contents</Text>
                 </Td>
               </Tr>
             ) : data.length === 0 ? ( // Check if there is no data
               <Tr>
                 <Td colSpan={headers.length} textAlign="center" p={'12px'}>
-                  <Text color='gray'>Không có dữ liệu</Text>
+                  <Text color='gray'>No data</Text>
                 </Td>
               </Tr>
             ) : (

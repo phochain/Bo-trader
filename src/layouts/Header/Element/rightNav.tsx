@@ -37,7 +37,7 @@ const RightNav = () => {
         >
           <IoMdNotifications size={23} color={colors.white}/>
         </Button>
-        <Text fontSize='sm' color={backgrounds.gray} display={{base: 'none', lg: 'block'}}>{t('Thông báo')}</Text>
+        <Text fontSize='sm' color={backgrounds.gray} display={{base: 'none', lg: 'block'}}>{t('Notifications')}</Text>
       </Box>
       <Drawer
         isOpen={isOpen}
@@ -50,7 +50,7 @@ const RightNav = () => {
           <DrawerCloseButton/>
           <DrawerHeader background={'#1f2f43'}>
             <Flex align={"center"} gap={2}>
-              {t('Thông báo')} <CheckmarkIcon/>
+              {t('Notifications')} <CheckmarkIcon/>
             </Flex>
           </DrawerHeader>
           <DrawerBody p={'8px 12px'}>

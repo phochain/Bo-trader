@@ -1,34 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
-import { BoTraderApi } from "../../../lib/api/service/boTraderApi.ts";
-import { formatTradeData } from "../../../utils";
-
-// Define Token interface that matches the expected structure
-interface Token {
-  id: string;
-  name: string;
-  symbol: string;
-}
-
-interface TradeData {
-  tokenId: string;
-  amount: string;
-  direction: { text: string; color: string };
-  tradingPair: string;
-  entryPrice: string;
-  expiryTime: string;
-  exitPrice: string;
-  result: { text: string; color: string };
-  status: string;
-  createdAt: string;
-}
+import { useEffect, useState, useMemo, useTransition, useCallback, useRef } from "react";
+import { useTradeStore } from "../../../lib/zustand/TransactionHistory.tsx";
 
 export const useTradeHistory = () => {
-  const [listToken, setListToken] = useState<Token[]>([]); // Set the correct type to Token[]
-  const [conversionDataTable, setConversionDataTable] = useState<TradeData[]>([]);
+  const [conversionDataTable, setConversionDataTable] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [prevData, setPrevData] = useState([]);
+  const [isPending, startTransition] = useTransition();
+  const prevFormattedData = useRef([]);
   const [tradeStats, setTradeStats] = useState<any>({
     totalTrades: 0,
     winRate: 0,
@@ -41,77 +22,88 @@ export const useTradeHistory = () => {
     netProfit: 0,
   });
 
-  const getListToken = useCallback(async () => {
-    try {
-      const res = await BoTraderApi.getListToken();
-      setListToken(res.data); // Assuming res.data is an array of Token objects
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
-  const handleHistoryTrade = useCallback(async () => {
-    if (listToken.length === 0) return;
-    try {
-      setIsLoading(true);
-      const res = await BoTraderApi.historyTrade('0', '100000', false);
-      const formattedData: TradeData[] = formatTradeData(res?.data?.contents, listToken); // Now listToken is correctly typed as Token[]
-      const totalTrades = formattedData.length;
-      const totalBuyTrades = formattedData.filter((trade) => trade.direction.text === 'BUY').length;
-      const totalSellTrades = formattedData.filter((trade) => trade.direction.text === 'SELL').length;
-      const buyPercentage = totalTrades > 0 ? ((totalBuyTrades / totalTrades) * 100).toFixed(2) : 0;
-      const sellPercentage = totalTrades > 0 ? ((totalSellTrades / totalTrades) * 100).toFixed(2) : 0;
-      const totalWins = formattedData.filter((trade) => trade.result.text === 'WIN').length;
-      const winRate = totalTrades > 0 ? (totalWins / totalTrades * 100).toFixed(2) : 0;
-      const totalVolume = formattedData.reduce((sum, trade) => sum + parseFloat(trade.amount), 0).toFixed(2);
-      const totalLosses = formattedData.filter((trade) => trade.result.text === 'LOSS').reduce((sum, trade) => sum + parseFloat(trade.amount), 0).toFixed(2);
-      const totalProfit = (parseFloat(totalVolume) - parseFloat(totalLosses)).toFixed(2);
-      const exchangeFee = parseFloat(totalProfit) * 0.05;
-      const netProfit = (parseFloat(totalProfit) - exchangeFee).toFixed(2);
-      setTradeStats({
-        totalTrades,
-        winRate,
-        totalVolume,
-        totalWins,
-        totalLosses: totalTrades - totalWins,
-        buyPercentage,
-        sellPercentage,
-        totalProfit,
-        netProfit
-      });
-      setTotal(formattedData.length);
-      const startIndex = (currentPage - 1) * pageSize;
-      const endIndex = startIndex + pageSize;
-      setConversionDataTable(formattedData.slice(startIndex, endIndex));
-    } catch (error) {
-      console.error('Error fetching trade history:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [listToken, currentPage, pageSize]);
+  const { TradeHistory, fetchTradeHistory } = useTradeStore();
+  const fetchData = useCallback(async () => {
+    setIsLoading(true);
+    await fetchTradeHistory();
+    setIsLoading(false);
+  }, [fetchTradeHistory]);
 
   useEffect(() => {
-    getListToken().then();
-  }, [getListToken]);
+    fetchData();
+  }, [fetchData]);
+
+  const formattedData = useMemo(() => {
+    return TradeHistory.map((item) => ({
+      userId: item.userId,
+      results: item.result === 1 ? "WIN" : item.result === 2 ? "LOSE" : "PENDING",
+      betAmount: parseFloat(item.betAmount.toFixed(2)),
+      betDirection: item.betDirection,
+      openPrice: parseFloat(item.openPrice.toFixed(2)),
+      closePrice: parseFloat(item.closePrice.toFixed(2)),
+      closeTime: new Date(item.closeTime).toLocaleString(),
+      createdAt: new Date(item.createdAt).toLocaleString(),
+    }));
+  }, [TradeHistory]);
 
   useEffect(() => {
-    if (listToken.length > 0) {
-      handleHistoryTrade().then();
+    if (formattedData.length === 0) return;
+    if (JSON.stringify(prevFormattedData.current) === JSON.stringify(formattedData)) {
+      return;
     }
-  }, [listToken, handleHistoryTrade, currentPage, pageSize]);
+    prevFormattedData.current = formattedData;
+    const totalTrades = formattedData.length;
+    const totalBuyTrades = formattedData.filter((trade) => trade.betDirection === "UP").length;
+    const totalSellTrades = formattedData.filter((trade) => trade.betDirection === "DOWN").length;
+    const buyPercentage = totalTrades > 0 ? ((totalBuyTrades / totalTrades) * 100).toFixed(2) : 0;
+    const sellPercentage = totalTrades > 0 ? ((totalSellTrades / totalTrades) * 100).toFixed(2) : 0;
+    const totalWins = formattedData.filter((trade) => trade.results === "WIN").length;
+    const totalLosses = totalTrades - totalWins;
+    const winRate = totalTrades > 0 ? ((totalWins / totalTrades) * 100).toFixed(2) : 0;
+    const totalVolume = formattedData.reduce((sum, trade) => sum + trade.betAmount, 0).toFixed(2);
+    const totalProfit = (parseFloat(totalVolume) - totalLosses).toFixed(2);
+    const exchangeFee = parseFloat(totalProfit) * 0.05;
+    const netProfit = (parseFloat(totalProfit) - exchangeFee).toFixed(2);
+
+    setTradeStats({
+      totalTrades,
+      winRate,
+      totalVolume,
+      totalWins,
+      totalLosses,
+      buyPercentage,
+      sellPercentage,
+      totalProfit,
+      netProfit,
+    });
+
+    setTotal(totalTrades);
+  }, [formattedData]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setPrevData(conversionDataTable);
+    }
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    setConversionDataTable(formattedData.slice(startIndex, endIndex));
+  }, [formattedData, currentPage, pageSize, isLoading]);
 
   const handlePageChange = (page: number, pageSize: number) => {
-    setCurrentPage(page);
-    setPageSize(pageSize);
+    startTransition(() => {
+      setCurrentPage(page);
+      setPageSize(pageSize);
+    });
   };
 
   return {
-    conversionDataTable,
+    conversionDataTable: isLoading ? prevData : conversionDataTable,
     isLoading,
+    isPending,
     currentPage,
     pageSize,
     total,
     handlePageChange,
-    tradeStats
+    tradeStats,
   };
 };

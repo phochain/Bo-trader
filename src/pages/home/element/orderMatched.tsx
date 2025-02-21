@@ -19,23 +19,23 @@ interface OrderMatchedProps {
 }
 
 const OrderMatched = ({orders}: OrderMatchedProps) => {
-  const {notifications, fetchNotificationHistory} = useGlobalApi() as {
-    notifications: Notification[];
-    fetchNotificationHistory: () => Promise<void>;
-  };
+  // const {notifications, fetchNotificationHistory} = useGlobalApi() as {
+  //   notifications: Notification[];
+  //   fetchNotificationHistory: () => Promise<void>;
+  // };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchNotificationHistory();
-    };
-    fetchData().then();
-  }, [fetchNotificationHistory]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await fetchNotificationHistory();
+  //   };
+  //   fetchData().then();
+  // }, [fetchNotificationHistory]);
 
-  const allOrders = [...orders, ...notifications];
+  // const allOrders = [...orders, ...notifications];
 
   return (
     <Box maxH={'100%'} overflow={"auto"}>
-      {allOrders.length === 0 ? <NoOrder/> : <TransactionBox transactions={allOrders}/>}
+      {/* {allOrders.length === 0 ? <NoOrder/> : <TransactionBox transactions={allOrders}/>} */}
     </Box>
   );
 };

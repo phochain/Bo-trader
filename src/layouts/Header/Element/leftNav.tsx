@@ -36,16 +36,16 @@ const LeftNav = () => {
       content: [
         {
           iconL: <AiOutlineTransaction size={22}/>,
-          title2: t('Giao dịch'),
+          title2: t('Transaction'),
           iconR: null,
           href: '/'
         },
-        {
-          iconL: <RiVipLine size={22}/>,
-          title2: t('Thành viên VIP'),
-          iconR: null,
-          href: "/affiliate",
-        },
+        // {
+        //   iconL: <RiVipLine size={22}/>,
+        //   title2: t('Thành viên VIP'),
+        //   iconR: null,
+        //   href: "/affiliate",
+        // },
       ]
     },
     {
@@ -53,19 +53,19 @@ const LeftNav = () => {
       content: [
         {
           iconL: <VscDashboard size={22}/>,
-          title2: t('Bảng điều khiển'),
+          title2: t('Dashboard'),
           iconR: null,
           href: "/trade-history",
         },
-        {
-          iconL: <GrTransaction size={22}/>,
-          title2: t('Lệnh'),
-          iconR: null,
-          href: "#",
-        },
+        // {
+        //   iconL: <GrTransaction size={22}/>,
+        //   title2: t('Lệnh'),
+        //   iconR: null,
+        //   href: "#",
+        // },
         {
           iconL: <CiWallet size={22}/>,
-          title2: t('Ví'),
+          title2: t('Wallet'),
           iconR: null,
           href: "/balance",
         },

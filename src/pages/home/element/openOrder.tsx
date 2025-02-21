@@ -18,36 +18,8 @@ interface OpenOrderProps {
 }
 
 const OpenOrder = ({orders: initialOrders}: OpenOrderProps) => {
-  const {fetchNotificationHistory, is_demo} = useGlobalApi() as {
-    notifications: any[];
-    fetchNotificationHistory: () => Promise<void>;
-    is_demo: boolean;
-  };
 
   const [orders, setOrders] = useState<Order[]>(initialOrders);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchNotificationHistory();
-    };
-    fetchData().then();
-
-    // Kiểm tra và cập nhật trạng thái của các đơn hàng
-    const interval = setInterval(() => {
-      const savedOrders: Order[] = JSON.parse(localStorage.getItem('orders') || '[]');
-      const updatedOrders = savedOrders.map((order: Order) => {
-        const orderAge = (new Date().getTime() - new Date(order.createdAt).getTime()) / 1000;
-        if (orderAge >= 30 && order.status === "PENDING") {
-          return {...order, status: "SETTLED"};
-        }
-        return order;
-      });
-      localStorage.setItem('orders', JSON.stringify(updatedOrders));
-      setOrders(updatedOrders.filter(order => order.status === "PENDING"));
-    }, 1000); // Kiểm tra mỗi giây
-
-    return () => clearInterval(interval);
-  }, [fetchNotificationHistory, is_demo]);
 
   return (
     <Box>
@@ -60,7 +32,6 @@ const OpenOrder = ({orders: initialOrders}: OpenOrderProps) => {
               <Box className='flex-box-between' mb={'8px'}>
                 <Flex align={"center"}>
                   <Text fontSize='sm' fontWeight={'700'}>BTC/USD</Text>
-                  {is_demo && <Box className='accType'>DEMO</Box>}
                 </Flex>
                 <Image src='assets/img/coins/btc.png' w={'18px'} alt="Bitcoin"/>
               </Box>

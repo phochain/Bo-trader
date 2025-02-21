@@ -17,14 +17,18 @@ import useGlobalApi from "../../../lib/zustand/useUserStore";
 import {playSound} from "../../../utils";
 
 import {Box, Button, Text} from "@chakra-ui/react";
+import { useTradeStore } from "../../../lib/zustand/TransactionHistory";
 
 interface Order {
   id: string;
   status: string;
   createdAt?: string;
-  amount?: number;
-  direction?: 'BUY' | 'SELL';
-  entryPrice: string;
+  betAmount?: number;
+  betDirection?: 'UP' | 'DOWN';
+  openPrice?: number | string;
+  closePrice?: number | string;
+  closeTime?: string;
+  result?: string;
 }
 
 const RightContent: React.FC = () => {
@@ -32,7 +36,8 @@ const RightContent: React.FC = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isTabsVisible, setIsTabsVisible] = useState(false);
   const {address} = useAccount();
-  const {balance, balanceTest, getBalance, is_demo} = useGlobalApi();
+  const {balance, getBalance} = useGlobalApi();
+  const {fetchTradeHistory} =useTradeStore()
   const [orders, setOrders] = useState<Order[]>(() => {
     const savedOrders = localStorage.getItem('orders');
     return savedOrders ? JSON.parse(savedOrders) : [];
@@ -56,7 +61,6 @@ const RightContent: React.FC = () => {
       }
     };
 
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -64,8 +68,8 @@ const RightContent: React.FC = () => {
   }, [inputValue]);
 
   const tabs = useMemo(() => [
-    <Text key="open" fontSize='sm' className='lastResults'>Mở</Text>,
-    <Text key="closed" fontSize='sm' className='lastResults'>Đóng</Text>
+    <Text key="open" fontSize='sm' className='lastResults'>Open</Text>,
+    <Text key="closed" fontSize='sm' className='lastResults'>Close</Text>
   ], []);
 
   const contents = useMemo(() => [
@@ -81,51 +85,37 @@ const RightContent: React.FC = () => {
     setActiveTabIndex(index);
   };
 
-  const handlePlaceTrade = async (direction: 'BUY' | 'SELL') => {
-    // setBalance(9999)
-    // return
-    const tokenId = 2;
-    const quoteTokenId = 2;
-    const baseTokenId = 4;
-    const amount = Number(inputValue);
-    const expiryTime = 30;
+  const handlePlaceTrade = async (betDirection: 'UP' | 'DOWN') => {
+    const betAmount = Number(inputValue);
 
-    const currentBalance = is_demo ? balanceTest : balance;
+    const currentBalance =  balance;
 
     if (!address) {
-      toast.error('Chưa kết nối ví');
+      toast.error('Wallet not connected');
       return;
     }
-    if (amount <= 0) {
-      toast.error('Số lượng giao dịch phải lớn hơn 0.');
+    if (betAmount <= 0) {
+      toast.error('The number of transactions must be greater than 0.');
       return;
     }
-    if (amount > currentBalance) {
-      toast.error("Số dư không đủ");
+    if (betAmount > currentBalance) {
+      toast.error("Insufficient balance.");
       return;
     }
     try {
-      setLoadingState((prev) => ({...prev, [direction]: true}));
+      setLoadingState((prev) => ({...prev, [betDirection]: true}));
       const res = await BoTraderApi.userPlaceTrade(
-        tokenId,
-        quoteTokenId,
-        baseTokenId,
-        amount,
-        direction,
-        expiryTime,
-        is_demo
+        betAmount,
+        betDirection,
       );
       playSound('assets/mp3/mouse-click.mp3');
-      //get balance => balanceTest, balance
-      // setBalance({})
-      await getBalance();
-      toast.success('Đặt lệnh thành công');
+      toast.success('Order placed successfully.');
+      await getBalance()
+      await fetchTradeHistory();
 
       const newOrder: Order = {
         ...res.data,
         createdAt: new Date().toISOString(),
-        entryPrice: res.data.entryPrice,
-        result: res.data.result
       };
 
       setOrders(prevOrders => {
@@ -133,11 +123,17 @@ const RightContent: React.FC = () => {
         localStorage.setItem('orders', JSON.stringify(updatedOrders));
         return updatedOrders;
       });
+
+      setTimeout(async () => {
+        await fetchTradeHistory();
+        await getBalance();
+      }, 30000);
+
     } catch (error: any) {
       console.error('Đã xảy ra lỗi:', error.response ? error.response.data : error.message);
       toast.error(error instanceof Error ? error.message : 'An unknown error occurred');
     } finally {
-      setLoadingState((prev) => ({...prev, [direction]: false}));
+      setLoadingState((prev) => ({...prev, [betDirection]: false}));
     }
   };
 
@@ -148,7 +144,7 @@ const RightContent: React.FC = () => {
           inputValue={inputValue}
           setInputValue={setInputValue}
           inputRef={inputRef}
-          currentBalance={is_demo ? balanceTest : balance}
+          currentBalance={ balance}
         />
         <ProfitDisplay inputValue={Number(inputValue)}/>
         <PsychologicalIndicator/>

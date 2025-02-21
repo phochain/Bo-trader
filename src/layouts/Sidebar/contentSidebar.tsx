@@ -17,22 +17,22 @@ const ContentSidebar = () => {
   const menuLeftPc = [
     {
       icon: <AiOutlineTransaction size={22}/>,
-      title: t('Giao Dịch'),
+      title: t('Transaction'),
       href: "/",
     },
-    {
-      icon: <RiVipLine size={22}/>,
-      title: t('Thành viên VIP'),
-      href: "/affiliate",
-    },
+    // {
+    //   icon: <RiVipLine size={22}/>,
+    //   title: t('Thành viên VIP'),
+    //   href: "/affiliate",
+    // },
     {
       icon: <CiWallet size={22}/>,
-      title: t('Ví'),
+      title: t('Wallet'),
       href: "/balance",
     },
     {
       icon: <VscDashboard size={22}/>,
-      title: t('Bảng điều khiển'),
+      title: t('Dashboard'),
       href: "/trade-history",
     },
   ]

@@ -16,7 +16,7 @@ const FinancialInformation = () => {
   const profitData = [
     {
       icon: <BsBarChartLineFill size={35}/>,
-      title: t('Lợi nhuận ròng'),
+      title: t('Net profit'),
       amount: isBalanceVisible
         ? tradeStats.netProfit > 0
           ? `+ ${tradeStats.netProfit} $`
@@ -26,7 +26,7 @@ const FinancialInformation = () => {
     },
     {
       icon: <GiFireFlower size={35}/>,
-      title: t('Tổng doanh thu'),
+      title: t('Total revenue'),
       amount: isBalanceVisible
         ? tradeStats.totalProfit >= 0
           ? `+ ${tradeStats.totalProfit} $`
@@ -55,7 +55,7 @@ const FinancialInformation = () => {
       </Grid>
       <Grid mt={6} templateColumns='repeat(4, 1fr)' gap={6}>
         <GridItem colSpan={4}>
-          <Text fontSize='xl' mb={3} textAlign="center">{t('Tóm tắt giao dịch')}</Text>
+          <Text fontSize='xl' mb={3} textAlign="center">{t('Transaction summary')}</Text>
           <Progress
             value={Number(tradeStats.buyPercentage) || 0}
             size='sm'
@@ -64,7 +64,7 @@ const FinancialInformation = () => {
             background={address ? '#03a781' : '#2f3342'}
           />
         </GridItem>
-        {[`${tradeStats.buyPercentage || 0} % ${t('Bán')}`, `${tradeStats.sellPercentage || 0} % ${t('Mua')}`].map((text, index) => (
+        {[`${tradeStats.buyPercentage || 0} % ${t('Sell')}`, `${tradeStats.sellPercentage || 0} % ${t('Buy')}`].map((text, index) => (
           <GridItem colSpan={2} key={index}>
             <Text fontSize='md' color={index === 0 ? 'rgb(240, 83, 89)' : 'rgb(3, 167, 129)'}
                   textAlign={index === 1 ? 'end' : 'start'}>

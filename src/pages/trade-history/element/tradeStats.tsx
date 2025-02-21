@@ -13,14 +13,14 @@ const TradeStats = () => {
 
   // Sử dụng useMemo để tránh tính toán lại các giá trị không thay đổi
   const stats = useMemo(() => [
-    { label: t('Lượt giao dịch'), value: tradeStats.totalTrades.toString(), isBold: true },
-    { label: t('Tỷ lệ thắng'), value: `${tradeStats.winRate} %`, isBold: true, border: true },
-    { label: t('Tổng giao dịch'), value: isBalanceVisible ? `${tradeStats.totalVolume.toString()} USDT` : "******", isBold: true }
+    { label: t('Number of transactions'), value: tradeStats.totalTrades.toString(), isBold: true },
+    { label: t('Win rate'), value: `${tradeStats.winRate} %`, isBold: true, border: true },
+    { label: t('Total transactions'), value: isBalanceVisible ? `${tradeStats.totalVolume.toString()} MSG` : "******", isBold: true }
   ], [t, tradeStats, isBalanceVisible]);
 
   const rounds = useMemo(() => [
-    { label: t('Tổng vòng thắng'), className: 'round--win', value: tradeStats.totalWins },
-    { label: t('Tổng vòng thua'), className: 'round--lose', value: tradeStats.totalLosses }
+    { label: t('Total wins'), className: 'round--win', value: tradeStats.totalWins },
+    { label: t('Total losses'), className: 'round--lose', value: tradeStats.totalLosses }
   ], [t, tradeStats]);
 
   // Hàm để render các phần tử lặp lại (vòng thắng và thua)

@@ -4,7 +4,6 @@ import LayoutComponents from "../layouts";
 import appRoute from "./appRoute.ts";
 
 const NotFound = lazy(() => import('../pages/not-found.tsx'))
-const GreetingsPage = lazy(() => import('../pages/greetings/index.tsx'))
 
 const routes = [
   {
@@ -18,10 +17,6 @@ const routes = [
         }
       )),
     ]
-  },
-  {
-    path: '/greetings/ref/:referrerId',
-    element: <GreetingsPage/>
   },
   {
     path: '*',

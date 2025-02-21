@@ -8,7 +8,7 @@ const NoDataCard = () => {
   return (
     <CardSecondary>
       <Box className='flex-box-center' p={'16px'}>
-        <Text fontSize='sm'>{t('Không có dữ liệu')}</Text>
+        <Text fontSize='sm'>{t('No data')}</Text>
       </Box>
     </CardSecondary>
   );

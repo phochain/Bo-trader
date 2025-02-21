@@ -7,12 +7,12 @@ interface ProfitDisplayProps {
 
 const ProfitDisplay: React.FC<ProfitDisplayProps> = ({inputValue}) => {
   const {t} = useTranslation();
-  const calculatedValue = inputValue * 1.95;
+  const calculatedValue = inputValue * 0.95;
 
   return (
     <Box m={'16px 0'} display={{base: 'flex', lg: 'block'}} justifyContent={"center"} alignItems={"center"} gap={{base: 2, lg: 0}}>
       <Box mb={{base: 0, lg: 2}} className='flex-box-center'>
-        <Text fontSize='sm'>{t('Lợi nhuận')}</Text>
+        <Text fontSize='sm'>{t('Profit')}</Text>
         <Text fontSize='xl' ms={2} fontWeight={'bold'}>95%</Text>
       </Box>
       <Center color={'rgb(3, 167, 129)'} fontWeight={700} fontSize={{base: '24px', lg: '30px'}}>
