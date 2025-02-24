@@ -1,28 +1,32 @@
-import { Box } from "@chakra-ui/react";
+import { Button, Center, Heading, Text, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 const NotFound = () => {
   return (
-    <Box borderTop={'2px solid #000'}>
-      <main className="bsod container--">
-        <h1 className="neg title">
-          <span className="bg">Error - 404</span>
-        </h1>
-        <p>An error has occurred, to continue:</p>
-        <p>
-          * Return to our homepage.<br />
+    <Center h="100vh" bg="gray.900" color="white" p={4}>
+      <VStack 
+        spacing={6} 
+        p={8} 
+        bg="gray.800" 
+        borderRadius="lg" 
+        boxShadow="xl" 
+        textAlign="center"
+      >
+        <Heading fontSize="4xl" color="red.400">
+          Error - 404
+        </Heading>
+        <Text fontSize="lg">An error has occurred, to continue:</Text>
+        <Text>
+          * Return to our homepage. <br />
           * Send us an e-mail about this error and try later.
-        </p>
-        <nav className="nav">
-          <Link
-            to="/"
-            style={{ background: '#aaa', padding: '0 15px 2px 13px', marginTop: '20px' }}
-          >
+        </Text>
+        <Link to="/">
+          <Button colorScheme="red" size="lg" _hover={{ bg: "red.500" }}>
             Home Page
-          </Link>
-        </nav>
-      </main>
-    </Box>
+          </Button>
+        </Link>
+      </VStack>
+    </Center>
   );
 };
 

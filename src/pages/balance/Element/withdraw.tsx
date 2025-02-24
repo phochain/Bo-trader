@@ -1,7 +1,7 @@
 import TokenTransactionForm from "./tokenTransactionForm.tsx";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useAccount } from "wagmi";
+import { useAccount, useSignMessage } from "wagmi";
 import { BoTraderApi } from "../../../lib/api/service/boTraderApi.ts";
 import { useQueryClient } from "@tanstack/react-query";
 import useGlobalApi from "../../../lib/zustand/useUserStore.tsx";
@@ -15,6 +15,7 @@ const Withdraw = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { getBalance, balance } = useGlobalApi();
   const {fetchTransactionHistory} = useTradeStore()
+  const { signMessageAsync } = useSignMessage();
 
   const handleSubmit = async () => {
     if (!address) {
@@ -29,6 +30,8 @@ const Withdraw = () => {
     }
     try {
       setIsLoading(true);
+      const message = `Confirm withdrawal of ${parsedAmount} ${selectedAsset}`;
+      await signMessageAsync({ message });
       await BoTraderApi.withdraw(parsedAmount);
       await queryClient.refetchQueries(['tokenWalletBalance', selectedAsset] as any);
       await getBalance();

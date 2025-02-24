@@ -225,7 +225,7 @@ const Chart = () => {
           fontWeight: "700",
           fontSize: "14px"
         }}>
-          BTC/USD
+          BTC/MSG
         </Box>
         {hoveredCandle && (
           <Box style={{

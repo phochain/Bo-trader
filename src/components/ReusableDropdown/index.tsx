@@ -4,7 +4,7 @@ import {backgrounds} from "../../theme";
 import {CiSettings} from "react-icons/ci";
 import {useTranslation} from 'react-i18next';
 import {MdKeyboardArrowDown, MdLanguage} from "react-icons/md";
-// import useGlobalApi from "../../lib/zustand/useUserStore.tsx";
+import useGlobalApi from "../../lib/zustand/useUserStore.tsx";
 import {FaEyeSlash} from "react-icons/fa";
 
 interface MenuItemConfig {
@@ -35,7 +35,7 @@ const ReusableDropdown: React.FC = () => {
     return localStorage.getItem('balanceVisible') === 'true';
   });
   const [currentLanguage, setCurrentLanguage] = useState(localStorage.getItem('language') || 'vi');
-  // const {toggleBalanceVisibility} = useGlobalApi();
+  const {toggleBalanceVisibility} = useGlobalApi();
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -67,7 +67,7 @@ const ReusableDropdown: React.FC = () => {
         const newVisibility = !isBalanceVisible;
         setIsBalanceVisible(newVisibility); // Update local state
         localStorage.setItem('balanceVisible', String(newVisibility)); // Save to localStorage
-        // toggleBalanceVisibility(); // Call function to toggle balance visibility
+        toggleBalanceVisibility(); // Call function to toggle balance visibility
       },
     },
   ];

@@ -1,54 +1,42 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { IoMdNotifications } from "react-icons/io";
-import mqtt from 'mqtt';
-import { BoTraderApi } from "../../lib/api/service/boTraderApi";
 import { backgrounds } from "../../theme";
 import useUserStore from "../../lib/zustand/useUserStore";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { useTradeStore } from "../../lib/zustand/TransactionHistory";
 
 interface Notification {
-  direction: string;
-  amount: number;
-  tokenId: string;
-  baseTokenId: string;
-  quoteTokenId: string;
-  result: string;
+  betAmount:  number;
+  betDirection: string;
+  openPrice:  number;
+  closePrice:  number;
+  closeTime:  string;
+  userId: number;
+  result: number | string;
   createdAt: string;
-  id: number; // Sử dụng id thay vì tradeId
-  readed?: number;
+  id: number;
+  readed: number;
 }
 
 const NotificationPage: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const { userInfo, getUserInfo } = useUserStore();
+  const { getUserInfo } = useUserStore();
+  const { TradeHistory, fetchTradeHistory } = useTradeStore()
   const { t } = useTranslation();
 
-  const markAsRead = async (id: number) => {
-    try {
-      await BoTraderApi.setReaded(id, 1); // Gọi API với id
-      setNotifications(prevNotifications =>
-        prevNotifications.map(notification =>
-          notification.id === id ? { ...notification, readed: 1 } : notification
-        )
-      );
-    } catch (error) {
-      console.error("Failed to mark as read:", error);
-    }
-  };
-
   const NotificationItem: FC<{ notification: Notification }> = ({ notification }) => (
-    <Link to={'#'} onClick={() => markAsRead(notification.id)}>
+    <Link to={'#'}>
       <Box
         ms={'40px'}
         mb={2}
         cursor="pointer"
       >
         <Text fontSize={'14px'} color={notification.readed === 0 ? '#fff' : '#ffffff70'}>
-          {t('Bạn đã đặt lệnh')} {notification.direction} {t('với số lượng')} ${(Number(notification.amount)).toFixed(2)} USD {t('với cặp giao dịch')} BTC/USD
+          {t('You have placed an order')} {notification.betDirection === 'UP' ? 'Buy' : 'Sell'} {t('with quantity')} {(Number(notification.betAmount)).toFixed(2)} MSG {t('with trading pair')} BTC/MSG
           <br />
-          {t('Kết quả')}: {notification.result}
+          {t('Result')}: {notification.result === 1 ? "Win" : notification.result === 2 ? "Lose" : "Pending"}
         </Text>
         <Text
           mt={2}
@@ -68,44 +56,11 @@ const NotificationPage: React.FC = () => {
     getUserInfo().then();
   }, [getUserInfo]);
 
-  const MQTT_URL = import.meta.env.VITE_APP_MQTT_URL;
-  const USER_ID = userInfo?.data?.id;
-
-  const handleNewNotification = useCallback((newNotification: Notification) => {
-    setNotifications(prevNotifications => {
-      const updatedNotifications = [newNotification, ...prevNotifications];
-      return updatedNotifications
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        .slice(0, 10);
-    });
-  }, []);
-
-  useEffect(() => {
-    const client = mqtt.connect(MQTT_URL);
-    const topic = `trade-success/${USER_ID}`;
-
-    client.on("connect", () => {
-      console.log("Connected to EMQ server");
-      client.subscribe(topic);
-      console.log(`Subscribed to topic ${topic}`);
-    });
-
-    client.on("message", (receivedTopic, message) => {
-      const data = JSON.parse(message.toString()) as Notification;
-      console.log(`Received message on topic ${receivedTopic}:`, data);
-      handleNewNotification(data);
-    });
-
-    return () => {
-      client.end();
-    };
-  }, [MQTT_URL, USER_ID, handleNewNotification]);
-
   useEffect(() => {
     const fetchNotificationHistory = async () => {
       try {
-        const res = await BoTraderApi.historyTrade('0', '100000');
-        const latestNotifications = res.data.contents as Notification[];
+        await fetchTradeHistory();
+        const latestNotifications = TradeHistory as Notification[];
         console.log(latestNotifications, 'latestNotifications');
         latestNotifications.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         setNotifications(latestNotifications.slice(0, 10));

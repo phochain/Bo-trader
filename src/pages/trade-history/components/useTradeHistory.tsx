@@ -36,9 +36,9 @@ export const useTradeHistory = () => {
   const formattedData = useMemo(() => {
     return TradeHistory.map((item) => ({
       userId: item.userId,
-      results: item.result === 1 ? "WIN" : item.result === 2 ? "LOSE" : "PENDING",
+      results: item.result === 1 ? "Win" : item.result === 2 ? "Lose" : "Pending",
       betAmount: parseFloat(item.betAmount.toFixed(2)),
-      betDirection: item.betDirection,
+      betDirection: item.betDirection === "UP" ? "Buy" : "Sell",
       openPrice: parseFloat(item.openPrice.toFixed(2)),
       closePrice: parseFloat(item.closePrice.toFixed(2)),
       closeTime: new Date(item.closeTime).toLocaleString(),
@@ -53,11 +53,11 @@ export const useTradeHistory = () => {
     }
     prevFormattedData.current = formattedData;
     const totalTrades = formattedData.length;
-    const totalBuyTrades = formattedData.filter((trade) => trade.betDirection === "UP").length;
-    const totalSellTrades = formattedData.filter((trade) => trade.betDirection === "DOWN").length;
+    const totalBuyTrades = formattedData.filter((trade) => trade.betDirection === "Buy").length;
+    const totalSellTrades = formattedData.filter((trade) => trade.betDirection === "Sell").length;
     const buyPercentage = totalTrades > 0 ? ((totalBuyTrades / totalTrades) * 100).toFixed(2) : 0;
     const sellPercentage = totalTrades > 0 ? ((totalSellTrades / totalTrades) * 100).toFixed(2) : 0;
-    const totalWins = formattedData.filter((trade) => trade.results === "WIN").length;
+    const totalWins = formattedData.filter((trade) => trade.results === "Win").length;
     const totalLosses = totalTrades - totalWins;
     const winRate = totalTrades > 0 ? ((totalWins / totalTrades) * 100).toFixed(2) : 0;
     const totalVolume = formattedData.reduce((sum, trade) => sum + trade.betAmount, 0).toFixed(2);
